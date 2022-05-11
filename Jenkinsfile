@@ -1,8 +1,13 @@
 pipeline {
 	agent {
-	  label 'java'
+	  label 'maven-slave01'
 	  }
 		stages {
+		stage('checkoutSCM'){
+			steps{
+			git branch: 'main', credentialsId: 'git-password', url: 'https://github.com/vdevpythongit/mavenjava.git'
+			}
+		}
 		 stage('Build') {
 		   steps {
              sh '''
@@ -12,7 +17,7 @@ pipeline {
 		}
 		 stage("test"){
 		   steps {
-		     echo "this isb test"
+		     echo "this is test"
 			}
 			}
 		stage('Production'){
