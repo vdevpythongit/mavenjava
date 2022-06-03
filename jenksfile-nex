@@ -1,0 +1,22 @@
+pipeline {
+	agent any
+		stages {
+		stage('checkoutSCM'){
+			steps{
+			git branch: 'main', url: 'https://github.com/vdevpythongit/mavenjava.git'
+			}
+		}
+		 stage('Build') {
+		   steps {
+             sh '''
+			   mvn clean install
+			 '''
+			}
+		}
+		 stage("test"){
+		   steps {
+		     nexusArtifactUploader artifacts: [[artifactId: 'SimpleWebApplication', classifier: '', file: 'target/SimpleWebApplication-9.1.14.war', type: 'war']], credentialsId: 'nexus', groupId: 'com.maven.bt', nexusUrl: '172.31.8.103', nexusVersion: 'nexus3', protocol: 'http', repository: 'mvn-son-nex', version: '9.1.14'
+			}
+			}
+ }
+}
